@@ -7,10 +7,6 @@ namespace ProjectLast
     {
         public static void Seed(AppDbContext context)
         {
-            // If there are already hotels, no need to seed again
-         
-
-            // Create some hotels
             var hotels = new[]
             {
                 new Hotels
@@ -36,7 +32,7 @@ namespace ProjectLast
             context.Hotels.AddRange(hotels);
             context.SaveChanges();
 
-            // Now create rooms for these hotels
+  
             var rooms = new[]
             {
                 new Room
@@ -45,7 +41,6 @@ namespace ProjectLast
                     HotelId = hotels[0].Id,
                     RoomTypeId = 1,
                     PricePerNight = 250,
-                    Available = true,
                     MaximumGuests = 4,
                     BookedDates = new System.Collections.Generic.List<BookedDate>
                     {
@@ -59,7 +54,6 @@ namespace ProjectLast
                     HotelId = hotels[1].Id,
                     RoomTypeId = 2,
                     PricePerNight = 150,
-                    Available = true,
                     MaximumGuests = 2,
                     BookedDates = new System.Collections.Generic.List<BookedDate>()
                 },
@@ -69,7 +63,6 @@ namespace ProjectLast
                     HotelId = hotels[2].Id,
                     RoomTypeId = 3,
                     PricePerNight = 300,
-                    Available = true,
                     MaximumGuests = 3,
                     BookedDates = new System.Collections.Generic.List<BookedDate>
                     {

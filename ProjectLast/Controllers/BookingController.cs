@@ -15,7 +15,7 @@ namespace ProjectLast.Controllers
             _context = context;
         }
 
-        // GET: api/booking
+
         [HttpGet]
         public IActionResult GetAllBookings()
         {
@@ -23,39 +23,48 @@ namespace ProjectLast.Controllers
             return Ok(bookings);
         }
 
-        // POST: api/booking
         [HttpPost]
-        public IActionResult CreateBooking([FromBody] BookedDate booking)
+        public IActionResult BookRoomByType([FromBody] RoomTypeBookingDto dto)
         {
-            var room = _context.Rooms.FirstOrDefault(r => r.Id == booking.RoomId);
+            for (var date = dto.CheckInDate.Date; date < dto.CheckOutDate.Date; date = date.AddDays(1))
+            {
+                bool alreadyBooked = _context.BookedDates
+                    .Any(b => b.RoomTypeId == dto.RoomTypeId && b.Date == date);
 
-            if (room == null)
-                return NotFound("Room not found.");
+                if (alreadyBooked)
+                    return BadRequest("Room of this type is already booked on one or more selected dates.");
+            }
 
-            if (room.BookedDates == null)
-                room.BookedDates = new List<BookedDate>();
-
-            room.BookedDates.Add(booking);
-            room.Available = false;
+            for (var date = dto.CheckInDate.Date; date < dto.CheckOutDate.Date; date = date.AddDays(1))
+            {
+                _context.BookedDates.Add(new BookedDate
+                {
+                    RoomTypeId = dto.RoomTypeId,
+                    Date = date
+                });
+            }
 
             _context.SaveChanges();
-
-            return Ok(booking);
+            return Ok("Booking successful.");
         }
 
-        // DELETE: api/booking/{id}
-        [HttpDelete("{id}")]
-        public IActionResult DeleteBooking(int id)
+
+        [HttpDelete("Delete")]
+        public IActionResult CancelBooking(int roomTypeId, DateTime checkInDate, DateTime checkOutDate)
         {
-            var booking = _context.BookedDates.FirstOrDefault(b => b.Id == id);
+            var bookings = _context.BookedDates
+                .Where(b => b.RoomTypeId == roomTypeId &&
+                            b.Date >= checkInDate.Date &&
+                            b.Date < checkOutDate.Date)
+                .ToList();
 
-            if (booking == null)
-                return NotFound("Booking not found.");
+            if (!bookings.Any())
+                return NotFound("No bookings found for the given dates and room type.");
 
-            _context.BookedDates.Remove(booking);
+            _context.BookedDates.RemoveRange(bookings);
             _context.SaveChanges();
 
-            return NoContent();
+            return Ok("Booking cancelled successfully.");
         }
     }
 }

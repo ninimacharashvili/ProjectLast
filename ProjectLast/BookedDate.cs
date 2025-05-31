@@ -7,12 +7,11 @@ namespace ProjectLast
     {
         [Key]
         public int Id { get; set; }
+        public int RoomTypeId { get; set; }
 
         public DateTime Date { get; set; }
 
-        [ForeignKey(nameof(Room))]
-        public int RoomId { get; set; }
 
-        public Room Room { get; set; }
+        //public Room Room { get; set; }
     }
 }

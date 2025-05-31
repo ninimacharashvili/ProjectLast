@@ -15,7 +15,6 @@ namespace ProjectLast.Controllers
                 _context = context;
             }
 
-            // GET: api/hotels/getall
             [HttpGet("getall")]
             public IActionResult GetAllHotels()
             {
@@ -23,7 +22,6 @@ namespace ProjectLast.Controllers
                 return Ok(hotels);
             }
 
-            // GET: api/hotels/gethotel/{id}
             [HttpGet("gethotel/{id}")]
             public IActionResult GetHotelById(int id)
             {
@@ -33,7 +31,6 @@ namespace ProjectLast.Controllers
                 return Ok(hotel);
             }
 
-            // GET: api/hotels/gethotels (optional duplicate of getall)
             [HttpGet("gethotels")]
             public IActionResult GetHotels()
             {
@@ -41,7 +38,7 @@ namespace ProjectLast.Controllers
                 return Ok(hotels);
             }
 
-            // GET: api/hotels/getcities
+            
             [HttpGet("getcities")]
             public IActionResult GetCities()
             {

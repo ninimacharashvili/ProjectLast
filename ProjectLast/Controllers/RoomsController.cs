@@ -33,17 +33,6 @@ namespace ProjectLast.Controllers
             return Ok(room);
         }
 
-        // GET: api/rooms/getavailablerooms
-        [HttpGet("getavailablerooms")]
-        public IActionResult GetAvailableRooms()
-        {
-            var rooms = _context.Rooms
-                .Where(r => r.Available)
-                .ToList();
-
-            return Ok(rooms);
-        }
-
         // GET: api/rooms/getroomtypes
         [HttpGet("getroomtypes")]
         public IActionResult GetRoomTypes()
